@@ -62,6 +62,14 @@ d3.csv("project-data.csv", function(d) {
       return asiaCountriesList.includes(d.properties.name);
     });
 
+    const median_country_fill = d => {
+      const medianAge = data.get(d.properties.name);
+      if (medianAge) {
+        return colorScale(medianAge);
+      } else {
+        return "#ccc";
+    }};
+
     svg.append("g")
       .selectAll("path")
       .data(asiaCountries)
@@ -69,10 +77,7 @@ d3.csv("project-data.csv", function(d) {
       .append("path")
       .attr("class", "country")
       .attr("d", path)
-      .attr("fill", function(d) {
-        var medianAge = data.get(d.properties.name) || 0;
-        return medianAge ? colorScale(medianAge) : "#ccc";
-      });
+      .attr("fill", d => median_country_fill(d));
 
     let legend = svg.append("g")
       .attr("transform", "translate(20,20)");
@@ -110,7 +115,7 @@ d3.csv("project-data.csv", function(d) {
 <p>Variables Used:</p>
 <ul>
   <li>Country (or dependency): The name of the country.</li>
-  <li>Med. Age: The median age of the population in each country./li>
+  <li>Med. Age: The median age of the population in each country.</li>
 </ul>
 
 <p>Note:</p>
